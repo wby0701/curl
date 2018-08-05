@@ -1,0 +1,72 @@
+.\" **************************************************************************
+.\" *                                  _   _ ____  _
+.\" *  Project                     ___| | | |  _ \| |
+.\" *                             / __| | | | |_) | |
+.\" *                            | (__| |_| |  _ <| |___
+.\" *                             \___|\___/|_| \_\_____|
+.\" *
+.\" * Copyright (C) 1998 - 2018, Daniel Stenberg, <daniel@haxx.se>, et al.
+.\" *
+.\" * This software is licensed as described in the file COPYING, which
+.\" * you should have received as part of this distribution. The terms
+.\" * are also available at https://curl.haxx.se/docs/copyright.html.
+.\" *
+.\" * You may opt to use, copy, modify, merge, publish, distribute and/or sell
+.\" * copies of the Software, and permit persons to whom the Software is
+.\" * furnished to do so, under the terms of the COPYING file.
+.\" *
+.\" * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
+.\" * KIND, either express or implied.
+.\" *
+.\" **************************************************************************
+.TH curl_url_set 3 "6 Aug 2018" "libcurl" "libcurl Manual"
+.SH NAME
+curl_url_set - set a part from a URL
+.SH SYNOPSIS
+.B #include <curl/curl.h>
+
+CURLUcode curl_url_set(CURLURL *url,
+                       CURLUPart what,
+                       char *part,
+                       unsigned int flags)
+.fi
+.SH DESCRIPTION
+Given the \fIurl\fP handle of an already parsed URL, this function lets the
+user set/update individual pieces of it.
+
+The \fIwhat\fP argument should be the particular CURLUPart to set or change
+and \fIpart\fP points to a zero terminated string with the new contents for
+that URL part.
+
+The \fIflags\fP argument is a bitmask with individual features.
+.SH CURLUPART_URL
+As a special feature, instead of setting individual components, this function
+also allows the full URL to be replaced. If the handle already is populated
+with a URL, the new URL can be relative to the previous.
+
+When successfully setting a new URL, relative or absolute, the handle contents
+will be replaced with the information of the newly set URL.
+.SH FLAGS
+The flags argument is zero, one or more bits set in a bitmask.
+.IP TODO
+.IP TODO
+.SH RETURN VALUE
+Returns a CURLUcode error value, which is CURLURLE_OK (0) if everything went
+fine.
+
+If this function returns an error, no URL part is returned.
+.SH EXAMPLE
+.nf
+  CURLUcode rc;
+  CURLURL *url;
+  rc = curl_url("https://example.com", &url, 0);
+  if(!rc) {
+    char *scheme;
+    /* change it to an FTP URL */
+    rc = curl_url_set(url, CURLUPART_SCHEME, "ftp", 0);
+    curl_url_cleanup(url);
+  }
+.fi
+.SH "SEE ALSO"
+.BR curl_url_cleanup "(3), " curl_url "(3), " curl_url_get "(3), "
+.BR curl_url_dup "(3), "
