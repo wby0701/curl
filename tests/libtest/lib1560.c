@@ -335,25 +335,28 @@ static CURLUPart part2id(char *part)
 static void updateurl(CURLURL *u, const char *cmd, unsigned int setflags)
 {
   const char *p = cmd;
-  char *e;
-  char buf[80];
-  char part[80];
-  char value[80];
 
   /* make sure the last command ends with a comma too! */
-  while((e = strchr(p, ','))) {
-    size_t n = e-p;
-    memcpy(buf, p, n);
-    buf[n] = 0;
-    if(2 == sscanf(buf, "%79[^=]=%79[^,]", part, value)) {
-      CURLUPart what = part2id(part);
+  while(1) {
+    char *e = strchr(p, ',');
+    if(e) {
+      size_t n = e-p;
+      char buf[80];
+      char part[80];
+      char value[80];
+      memcpy(buf, p, n);
+      buf[n] = 0;
+      if(2 == sscanf(buf, "%79[^=]=%79[^,]", part, value)) {
+        CURLUPart what = part2id(part);
 #if 0
-      /* for debugging this */
-      fprintf(stderr, "%s = %s [%d]\n", part, value, (int)what);
+        /* for debugging this */
+        fprintf(stderr, "%s = %s [%d]\n", part, value, (int)what);
 #endif
-      curl_url_set(u, what, value, setflags);
+        curl_url_set(u, what, value, setflags);
+      }
+      p = e + 1;
     }
-    p = e + 1;
+    break;
   }
 
 }
