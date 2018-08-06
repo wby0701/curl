@@ -388,6 +388,7 @@ static CURLUcode parse_hostname_login(struct Curl_URL *u, char **hostname,
                                       unsigned int flags)
 {
   CURLUcode result = CURLURLE_OK;
+  CURLcode ccode;
   char *userp = NULL;
   char *passwdp = NULL;
   char *optionsp = NULL;
@@ -412,10 +413,12 @@ static CURLUcode parse_hostname_login(struct Curl_URL *u, char **hostname,
 
   /* We could use the login information in the URL so extract it. Only parse
      options if the handler says we should. */
-  result = Curl_parse_login_details(login, ptr - login - 1,
-                                    &userp, &passwdp, &optionsp);
-  if(result)
+  ccode = Curl_parse_login_details(login, ptr - login - 1,
+                                   &userp, &passwdp, &optionsp);
+  if(ccode) {
+    result = CURLURLE_MALFORMED_INPUT;
     goto out;
+  }
 
   if(userp) {
     if(flags & CURLURL_DISALLOW_USER) {
