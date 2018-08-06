@@ -872,7 +872,7 @@ CURLUcode curl_url_get(CURLURL *u, CURLUPart what,
         ptr = portbuf;
       }
     }
-    else if(ptr && & u->scheme) {
+    else if(ptr && u->scheme) {
       /* there is a stored port number, but ask to inhibit if
          it matches the default one for the scheme */
       const struct Curl_handler *h =
