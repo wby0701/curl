@@ -337,7 +337,7 @@ static void updateurl(CURLURL *u, const char *cmd, unsigned int setflags)
   const char *p = cmd;
 
   /* make sure the last command ends with a comma too! */
-  while(1) {
+  while(p) {
     char *e = strchr(p, ',');
     if(e) {
       size_t n = e-p;
