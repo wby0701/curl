@@ -47,7 +47,7 @@ typedef enum {
   CURLURLE_NO_PATH,
   CURLURLE_NO_QUERY,
   CURLURLE_NO_FRAGMENT,
-  CURLURLE_OUT_OF_MEMORY,
+  CURLURLE_OUT_OF_MEMORY
 } CURLUcode;
 
 #define CURLURL_DEFAULT_PORT (1<<0)       /* return default port number (only works
